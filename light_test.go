@@ -74,6 +74,21 @@ func TestNewEvent(t *testing.T) {
 	}
 }
 
+func TestAddSubscriber(t *testing.T) {
+	var out = make([]int, 0)
+	light.AddSubscriber(func(e light.Event) error {
+		out = append(out, 1)
+		return nil
+	})
+
+	light.Emit(light.NewEvent("a"))
+	light.Emit(light.NewEvent("b"))
+
+	if len(out) != 2 {
+		t.Error("Wrong answer in TestAddSubscriber")
+	}
+}
+
 func BenchmarkEmit(b *testing.B) {
 	event := light.NewEvent("bench")
 	light.Handle("bench", func(e light.Event) error {

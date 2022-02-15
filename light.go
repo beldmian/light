@@ -13,3 +13,7 @@ func Emit(event Event) error {
 func AsyncEmit(event Event) {
 	globalManager.AsyncEmit(event)
 }
+
+func AddSubscriber(subscriber SubscribeHandler) {
+	globalManager.AddSubscriber(subscriber)
+}
