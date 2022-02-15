@@ -27,6 +27,26 @@ func TestEmit(t *testing.T) {
 	}
 }
 
+func TestEmit_multipleHandlers(t *testing.T) {
+	var out = make([]int, 0)
+
+	light.Handle("a", func(e light.Event) error {
+		out = append(out, 1)
+		return nil
+	})
+
+	light.Handle("a", func(e light.Event) error {
+		out = append(out, 2)
+		return nil
+	})
+
+	light.Emit(light.NewEvent("a"))
+
+	if len(out) != 2 {
+		t.Errorf("Error in multiple handlers test")
+	}
+}
+
 func TestEmitAsync(t *testing.T) {
 	var output bytes.Buffer
 
