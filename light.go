@@ -14,26 +14,36 @@ func NewEvent(name string) Event {
 }
 
 type Manager struct {
-	handlers map[string]EventHandler
+	handlers map[string][]EventHandler
 }
 
 func (m *Manager) AddHandler(name string, handler EventHandler) {
-	m.handlers[name] = handler
+	if _, ok := m.handlers[name]; !ok {
+		m.handlers[name] = make([]func(Event) error, 0)
+	}
+	m.handlers[name] = append(m.handlers[name], handler)
 }
 
 func (m *Manager) Emit(event Event) error {
-	return m.handlers[event.Name](event)
+	for _, handler := range m.handlers[event.Name] {
+		if err := handler(event); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (m *Manager) AsyncEmit(event Event) {
-	if err := m.handlers[event.Name](event); err != nil {
-		panic(err)
+	for _, handler := range m.handlers[event.Name] {
+		if err := handler(event); err != nil {
+			panic(err)
+		}
 	}
 }
 
 func NewManager() Manager {
 	return Manager{
-		handlers: make(map[string]func(Event) error),
+		handlers: make(map[string][]EventHandler),
 	}
 }
 
