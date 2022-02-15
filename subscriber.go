@@ -1,3 +1,4 @@
 package light
 
-type SubscribeHandler = func(e Event) error
+// SubscribeHandler provide handler for subscriber
+type SubscribeHandler func(e Event) error

@@ -76,7 +76,7 @@ func TestNewEvent(t *testing.T) {
 
 func TestAddSubscriber(t *testing.T) {
 	var out = make([]int, 0)
-	light.AddSubscriber(func(e light.Event) error {
+	light.Subscribe(func(e light.Event) error {
 		out = append(out, 1)
 		return nil
 	})
