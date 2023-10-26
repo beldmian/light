@@ -10,7 +10,7 @@ jobs:
 
     - name: Run tests
       run: |
-        go test -cover -coverprofile=coverage.out -v -coverpkg=./... -count=1 ./...
+        go test -cover -coverprofile=coverage.out -v -covermode=atomic -coverpkg=./... -count=1 ./...
         go tool cover -func=coverage.out
 
     - name: Upload coverage reports to Codecov
